@@ -1,16 +1,5 @@
+import 'pdv_app.dart';
 void main(){
-
-}
-
-class produto{
-    string nome;
-    double valorUnitario;
-
-    produto(this.nome, this.valorunitario);
-
-    @override
-    String toString(){
-        return 'produto: $nome - valor: R\$ $ (valorunitario.toStringasFixed(2))';
-
-    }
+    PDVApp app = PDVApp();
+    app.iniciar();
 }

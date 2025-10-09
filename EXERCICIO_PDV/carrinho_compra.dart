@@ -9,11 +9,12 @@ class CarrinhoCompra{
 
     double calcularTotal(){
         double total = 0;
-        for(var item = 0 in itens){
-            total += item.calcularSubTotal()
+        for(var item in itens){
+            total += item.calcularSubTotal();
         }
         return total;
     }
+
     double calcularDesconto(){
         double total = calcularTotal();
         if(total >= 200){
@@ -21,12 +22,15 @@ class CarrinhoCompra{
         }
         return 0;
     }
+
     double calcularValorFinal(){
         return calcularTotal() - calcularDesconto();
     }
+
     bool estaVazio(){
         return itens.isEmpty;
     }
+
     int quantidadeItens(){
         return itens.length;
     }
