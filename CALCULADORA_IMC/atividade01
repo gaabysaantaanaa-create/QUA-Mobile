@@ -1,0 +1,125 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+  static const String _title = 'Calculadora de IMC';
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: _title,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const IMCCalculator(),
+    );
+  }
+}
+
+class IMCCalculator extends StatefulWidget {
+  const IMCCalculator({super.key});
+
+  @override
+  _IMCCalculatorState createState() => _IMCCalculatorState();
+}
+
+class _IMCCalculatorState extends State<IMCCalculator> {
+  final TextEditingController _pesoController = TextEditingController();
+  final TextEditingController _alturaController = TextEditingController();
+  String _resultado = "";
+
+  void _calcularIMC() {
+    final double? peso = double.tryParse(_pesoController.text.replaceAll(',', '.'));
+    final double? altura = double.tryParse(_alturaController.text.replaceAll(',', '.'));
+
+    if (peso == null || altura == null || peso <= 0 || altura <= 0) {
+      setState(() {
+        _resultado = "Por favor, insira valores válidos.";
+      });
+      return;
+    }
+
+    final double imc = peso / (altura * altura);
+    String classificacao = "";
+
+    if (imc < 18.5) {
+      classificacao = "Abaixo do peso";
+    } else if (imc < 24.9) {
+      classificacao = "Peso normal";
+    } else if (imc < 29.9) {
+      classificacao = "Sobrepeso";
+    } else if (imc < 34.9) {
+      classificacao = "Obesidade grau I";
+    } else if (imc < 39.9) {
+      classificacao = "Obesidade grau II";
+    } else {
+      classificacao = "Obesidade grau III";
+    }
+
+    setState(() {
+      _resultado = "IMC: ${imc.toStringAsFixed(2)}\n$classificacao";
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Calculadora de IMC'),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'Informe seus dados:',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              controller: _pesoController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'Peso (kg)',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.monitor_weight_outlined),
+              ),
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              controller: _alturaController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'Altura (m)',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.height),
+              ),
+            ),
+            const SizedBox(height: 30),
+            ElevatedButton.icon(
+              onPressed: _calcularIMC,
+              icon: const Icon(Icons.calculate),
+              label: const Text(
+                'Calcular IMC',
+                style: TextStyle(fontSize: 18),
+              ),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+              ),
+            ),
+            const SizedBox(height: 30),
+            Text(
+              _resultado,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
